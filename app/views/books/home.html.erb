@@ -1,0 +1,6 @@
+<h1>Books Home Page</h1>
+
+
+<% @books.each do |book| %>
+  <li> <%= link_to book[:title], books_show_path(book) %> </li>
+<% end %>

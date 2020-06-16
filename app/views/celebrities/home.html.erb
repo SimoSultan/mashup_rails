@@ -1,0 +1,7 @@
+<%#= render 'shared/celebrities_top_nav' %>
+<h1>Celeb Home Page</h1>
+
+
+<% @celebrities.each do |celeb| %>
+  <li> <%= link_to celeb['name'], show_path(celeb) %> </li>
+<% end %>

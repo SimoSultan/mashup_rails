@@ -1,0 +1,8 @@
+<%#= render 'shared/celebrities_top_nav' %>
+
+<h1>Celeb Show Page</h1>
+
+<h2><%= @celebrity['name']%></h2>
+<p><%= @celebrity['name']%> has starred in <%=@celebrity['notability']%></p>
+
+<p><%= link_to 'Back', celebrities_home_path %></p>
