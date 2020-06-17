@@ -1,2 +1,59 @@
-<h1>Pokemons#home</h1>
-<p>Find me in app/views/pokemons/home.html.erb</p>
+<h1>The Original Kanto Pokemon</h1>
+
+
+<% 
+=begin
+%> 
+
+<% @pokemon.each do |pok| %>
+
+    <div class="row">
+    <div class="col s12 m2">
+      <div class="card">
+        <div class="card-image">
+          <%= image_tag pok[:image]%>
+          <span class="card-title" style="color:black">#<%= pok[:num] %> <%= pok[:name] %> </span>
+        </div>
+        <div class="card-content">
+          <p><%= pok[:description] %></p>
+        </div>
+        <div class="card-action">
+          <a href="#"> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]) %> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<% 
+=end 
+%>
+
+
+
+<table class="highlight">
+  <thead>
+    <tr>
+        <th>Image</th>
+        <th>#</th>
+        <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+ 
+  <% @all_pokemon.each do |pok| %>
+
+    <tr>
+      <td> <%= image_tag pok[:image]%></td>
+      <td> <%= pok[:num] %>  </td>
+      <td> <%= pok[:name].capitalize %> </td>
+      <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]) %> </td>
+    </tr>
+  <% end %>
+
+  </tbody>
+</table>
+
+

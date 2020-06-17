@@ -1,0 +1,43 @@
+
+<h2><%= @pokemon[:name]%></h2>
+
+<% 
+=begin
+%> 
+<%= image_tag @pokemon[:image], :class => "pokemon-show-image"%>
+<p> Description: <%= @pokemon[:description] %> </p>
+<p> Type1: <%= @pokemon[:type1] %> </p>
+<p> Type2: <%= @pokemon[:type2] %> </p>
+<p> Weight: <%= @pokemon[:weight] %>kg </p>
+<p> Base Exp: <%= @pokemon[:base_exp] %> </p>
+
+
+<% 
+=end 
+%>
+
+
+
+<div class="row">
+  <div class="col s12 m4">
+    <div class="card">
+      <div class="card-image">
+        <%= image_tag @pokemon[:image]%>
+        <span class="card-title" style="color:black">#<%= @pokemon[:num] %> <%= @pokemon[:name] %> </span>
+      </div>
+      <div class="card-content">
+        <p>Description: <%= @pokemon[:description] %></p>
+        <p>Type1: <%= @pokemon[:type1] %></p>
+        <p>Type2: <%= @pokemon[:type2] %></p>
+        <p>Weight: <%= @pokemon[:weight] %></p>
+        <p>Base Exp: <%= @pokemon[:base_exp] %></p>
+      </div>
+      <div class="card-action">
+        <a href="#"> <%#= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]) %> </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<p><%= link_to 'Back', pokemons_home_path %></p>

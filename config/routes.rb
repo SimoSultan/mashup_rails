@@ -28,6 +28,6 @@ Rails.application.routes.draw do
 
   # POKEMON
   get 'pokemons/home', to: "pokemons#home", as: "pokemons_home"
-
+  get 'pokemons/:name', to:"pokemons#show", as:"pokemons_show"
 
 end

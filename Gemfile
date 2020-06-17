@@ -56,3 +56,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "materialize-sass", "~> 1.0"
 
 gem 'material_icons'
+
+gem "json", "~> 2.3"
+
+gem "poke-api-v2", "~> 0.1.0"
+
+gem "httparty", "~> 0.18.1"
