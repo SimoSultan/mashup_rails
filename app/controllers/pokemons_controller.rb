@@ -20,7 +20,6 @@ class PokemonsController < ApplicationController
     num = data["id"]
     base_exp = data["base_experience"]
     weight = data["weight"]
-    # image = data["sprites"]["front_default"]
     image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
     abilities = data["abilities"]
     type1 = data["types"][0]["type"]["name"].capitalize
@@ -31,76 +30,99 @@ class PokemonsController < ApplicationController
     end
     
     species = HTTParty.get("https://pokeapi.co/api/v2/pokemon-species/#{pokemon_name}")
-    parsed_species = species.parsed_response
-    description = parsed_species["flavor_text_entries"][0]["flavor_text"]
+    species = species.parsed_response
+    description = species["flavor_text_entries"][0]["flavor_text"]
 
-    @pokemon = {name: name, num: 1, image: image, description: description, type1: type1, type2: type2, weight: weight, base_exp: base_exp}
+    evolution_chain_url = species["evolution_chain"]["url"]
+    evolutions = get_all_evolutions(evolution_chain_url) #=> an array of strings
+
+    evolutions = check_if_pokemon_are_all_in_original(evolutions) #=> an array of hashes of basic pokemon info 
+ 
+    @pokemon = {
+      name: name, 
+      num: 1, 
+      image: image, 
+      description: description, 
+      type1: type1, 
+      type2: type2, 
+      weight: weight, 
+      base_exp: base_exp,
+      evolutions: evolutions,
+    }
   end
 
-  private def catch_all_og_pokemon
-    response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
-    data = response.parsed_response["results"]
-    # puts data[0]["name"]
-    @@pokemons = []
-    # @@pokemons = data
-    
-    min_data = []
-    data.each do |h|
-      id = h["url"].scan( /\/[0-9]{1,3}\// ).first
-      id = id[1..-2]
-      name = h["name"]
-      image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
-      new_h = {name: name, num: id, image: image}
-      min_data.push(new_h)
+
+  private 
+
+    def catch_all_og_pokemon
+      response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
+      data = response.parsed_response["results"]
+      @@pokemons = []
+      
+      min_data = []
+      data.each do |h|
+        id = h["url"].scan(/\/\d{1,3}\//).first
+        id = id[1..-2]
+        name = h["name"]
+        url = h["url"]
+        image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
+        new_h = {name: name, num: id, image: image, url: url}
+        min_data.push(new_h)
+      end
+      @@pokemons = min_data
     end
-    @@pokemons = min_data
 
 
+    def get_all_evolutions(url)
+      arr = []
+      evolution_chain = HTTParty.get(url)
+      evolution_chain = evolution_chain.parsed_response
 
-    # response = PokeApi.get(pokemon: 'bulbasaur')
-    # puts response
-    # image = response.sprites.front_default
-    # text_response = PokeApi.get(pokemon_species: 'rapidash').flavor_text_entries.find do |text|
-    #   { 
-    #     if text.language.name == "en"
-    #    text.flavor_text
-    #   }
-    # puts text_response
-    # name = response.name.capitalize
-    # name = response.name
-    # num = response.id
-    # puts response[:types]
-    # type1 = response["types"][0]
-    # type1 = response.types[0][:type][:name]
-    # type2 = response.types[1][:type][:name]
-    # type2 = response["types"][0]
-    # image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{num}.png"
-    # @@pokemons.push({name: name, num: num, image: image}) 
-    # @@pokemons.push({name: name, num: num, image: image, type1: type1, type2: type2}) 
-  end
+      base_form = evolution_chain["chain"]["species"]["name"].capitalize #Bulbasaur / #Eevee
+      arr.push(base_form)
+      return arr if evolves?(evolution_chain["chain"]) == false
+    
+      if base_form.downcase == "eevee"
+        alt_evo0 = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Vaporeon
+        alt_evo1 = evolution_chain["chain"]["evolves_to"][1]["species"]["name"].capitalize #Jolteon
+        alt_evo2 = evolution_chain["chain"]["evolves_to"][2]["species"]["name"].capitalize #Flareon
+        arr.push(alt_evo0, alt_evo1, alt_evo2)
+        return arr
+      end
 
-  def catch_one_og_pokemon()
-    pokemon = "bulbasaur"
-    response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{pokemon}")
-    @@pokemons = []
-    data = response.parsed_response
-    name = data["name"].capitalize
-    num = data["id"]
-    base_exp = data["base_experience"]
-    weight = data["weight"]
-    image = data["sprites"]["front_default"]
-    # image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
+      second_form = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Ivysaur
+      arr.push(second_form)
+      return arr if evolves?(evolution_chain["chain"]["evolves_to"][0]) == false
 
-    abilities = data["abilities"]
-    type1 = data["types"][0]["type"]["name"]
-    type2 = data["types"][1]["type"]["name"]
+      third_form = evolution_chain["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"].capitalize #Venusaur
+      arr.push(third_form)
 
-    species = HTTParty.get("https://pokeapi.co/api/v2/pokemon-species/#{pokemon}")
-    parsed_species = species.parsed_response
-    description = parsed_species["flavor_text_entries"][0]["flavor_text"]
+      return arr #array of strings
 
-    # @@pokemons.push({name: name, num: 1, image: image, description: "I like grass", type1: type1, type2: type2}) 
-    @@pokemons.push({name: name, num: 1, image: image, description: description, type1: type1, type2: type2}) 
+    end
 
-  end
+  
+    def evolves?(form) #evolution_chain["chain"]
+      form["evolves_to"].empty? ? false : true
+    end
+    
+    # def is_eevee?(base_form)
+    #   @@pokemons.any? {|h| h[:name] == base_form.downcase} ? true : false
+    # end
+
+
+    def check_if_pokemon_are_all_in_original(pokemon_arr)
+      new_arr = []
+      pokemon_arr.each do |pok|
+        @@pokemons.any? do |h| 
+          if h[:name] == pok.downcase
+            new_arr.push(h) 
+          end
+        end
+      end
+      return new_arr
+    end
+
+    # def is_baby? #future
+    # end
 end

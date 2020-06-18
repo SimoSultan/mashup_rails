@@ -4,6 +4,30 @@
 
 body {
   width: 100vw;
+  .home-container {
+    height: 70%;
+    overflow-y: scroll;
+  }
+  .show-container {
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    margin-left: 0;
+    height: 70%;
+    overflow-y: scroll;
+    .row {
+      display: flex;
+      place-items: center;
+      justify-content: space-around;
+      .col.m4, .col.m2 {
+        margin-left: 0;
+      }
+    }
+  }
+  footer {
+    position: fixed;
+  }
+
 }
 .card .card-image img {
   background-color: lightgrey;
@@ -18,15 +42,22 @@ body {
 }
 
 table {
-  cursor: pointer;
   td {
     width: 10%;
     padding: 0 5px;
     img {
       width: 25%;
     }
+    .find-out-more {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
+
+
 // .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
 //   margin-right: 0;
 // }

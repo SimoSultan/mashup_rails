@@ -30,8 +30,7 @@
 =end 
 %>
 
-
-
+<section class="home-container">
 <table class="highlight">
   <thead>
     <tr>
@@ -49,11 +48,14 @@
       <td> <%= image_tag pok[:image]%></td>
       <td> <%= pok[:num] %>  </td>
       <td> <%= pok[:name].capitalize %> </td>
-      <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]) %> </td>
+      <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
     </tr>
   <% end %>
 
   </tbody>
 </table>
+</section>
+
+
 
 
