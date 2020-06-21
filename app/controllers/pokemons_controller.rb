@@ -105,10 +105,6 @@ class PokemonsController < ApplicationController
     def evolves?(form) #evolution_chain["chain"]
       form["evolves_to"].empty? ? false : true
     end
-    
-    # def is_eevee?(base_form)
-    #   @@pokemons.any? {|h| h[:name] == base_form.downcase} ? true : false
-    # end
 
 
     def check_if_pokemon_are_all_in_original(pokemon_arr)
