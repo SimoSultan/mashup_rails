@@ -7,6 +7,7 @@ class PokemonsController < ApplicationController
 
   before_action :catch_all_og_pokemon
   @@pokemons = []
+  @@party = []
 
   def home
     @all_pokemon = @@pokemons
@@ -60,6 +61,25 @@ class PokemonsController < ApplicationController
       evolutions: evolutions,
     }
   end
+
+  # def party
+  #   # show pokemon party 
+  #   @party = @@pokemons
+  # end
+
+  # def add
+  #   # add a pokemon to your party
+  #   # @@party.push(params)
+  # end
+
+  # def remove
+  #   # remove a pokemon from your party
+  # end
+
+
+
+
+
 
 
   private 
@@ -115,10 +135,6 @@ class PokemonsController < ApplicationController
     def evolves?(form) #evolution_chain["chain"]
       form["evolves_to"].empty? ? false : true
     end
-    
-    # def is_eevee?(base_form)
-    #   @@pokemons.any? {|h| h[:name] == base_form.downcase} ? true : false
-    # end
 
 
     def check_if_pokemon_are_all_in_original(pokemon_arr)

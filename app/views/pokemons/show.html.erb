@@ -17,12 +17,8 @@
           base_exp: @pokemon[:base_exp]
           } %>
           <% poke[:image] = "https://pokeres.bastionbot.org/images/pokemon/#{poke[:num]}.png"%>
-          <%# link = ""%>
-          <%# link_text = ""%>
       <% else %>     
         <% card_size = "m2" %>
-        <%# link = pokemons_show_path(poke[:evolutions][:name]) %>
-        <%# link_text = "FIND OUT MORE"%>
         <% if index == 0 %>
           <% description = {
             description: "BASE FORM",
