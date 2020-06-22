@@ -7,6 +7,7 @@ class PokemonsController < ApplicationController
 
   before_action :catch_all_og_pokemon
   @@pokemons = []
+  @@party = []
 
   def home
     @all_pokemon = @@pokemons
@@ -50,6 +51,25 @@ class PokemonsController < ApplicationController
       evolutions: evolutions,
     }
   end
+
+  # def party
+  #   # show pokemon party 
+  #   @party = @@pokemons
+  # end
+
+  # def add
+  #   # add a pokemon to your party
+  #   # @@party.push(params)
+  # end
+
+  # def remove
+  #   # remove a pokemon from your party
+  # end
+
+
+
+
+
 
 
   private 
