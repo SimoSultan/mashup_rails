@@ -1,11 +1,16 @@
 <h1>The Original Kanto Pokemon</h1>
 
+<h6>
+  <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
+</h6>
+
 
 <form action="<%=pokemons_home_path%>" method = "GET">
   <label for="poke_name"></label>
   <input type="text" name="pokemon_name" id="poke_name" style="width:50%">
   <input type="submit" value="Search">
 </form>
+
 
 <section class="home-container">
 <table class="highlight">
@@ -14,6 +19,8 @@
         <th>Image</th>
         <th>#</th>
         <th>Name</th>
+        <th>About</th>
+        <th>Party</th>
     </tr>
   </thead>
 
@@ -26,6 +33,7 @@
       <td> <%= pok[:num] %>  </td>
       <td> <%= pok[:name].capitalize %> </td>
       <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
+      <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok), :class => 'add-to-party' %> </td>
     </tr>
   <% end %>
 

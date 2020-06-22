@@ -1,0 +1,54 @@
+
+<h1>My Pokemon Party</h1>
+
+
+<section class="home-container">
+
+
+
+<% if @party.empty? %>
+  <p>You don't have any pokemon in your party yet.</p>
+  <p>Go back to homepage to add them.</p>
+  <% else %>
+
+  <table class="highlight">
+  <thead>
+    <tr>
+        <th>Image</th>
+        <th>#</th>
+        <th>Name</th>
+        <% if false %>
+        <th>About</th>
+        <th>Remove</th>
+        <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+ 
+  <% @party.each do |pok| %>
+
+    <tr>
+      <td> <%= image_tag pok[:image]%></td>
+      <td> <%= pok[:num] %>  </td>
+      <td> <%= pok[:name].capitalize %> </td>
+      <td> <%#= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
+      <td> <%#= link_to 'REMOVE FROM PARTY', pokemons_party_remove_path(pok[:name]), :class => 'remove-from-party' %> </td>
+    </tr>
+  <% end %>
+
+  </tbody>
+</table>
+  
+<% end %>
+
+<%= link_to 'Back', pokemons_home_path, :class=> "waves-effect waves-light btn" %>
+
+</section>
+
+
+
+
+
+
+
