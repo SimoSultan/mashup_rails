@@ -11,6 +11,13 @@ class PokemonsController < ApplicationController
 
   def home
     @all_pokemon = @@pokemons
+
+    @all_pokemon.each do |pokemon|
+      if pokemon[:name] == params['pokemon_name']
+        @all_pokemon = [pokemon]
+      end
+    end
+    @all_pokemon
   end
 
   def show
@@ -38,7 +45,10 @@ class PokemonsController < ApplicationController
     evolutions = get_all_evolutions(evolution_chain_url) #=> an array of strings
 
     evolutions = check_if_pokemon_are_all_in_original(evolutions) #=> an array of hashes of basic pokemon info 
- 
+
+    type1 = type_colour(type1)
+    type2 = type_colour(type2)
+
     @pokemon = {
       name: name, 
       num: 1, 
@@ -141,4 +151,35 @@ class PokemonsController < ApplicationController
 
     # def is_baby? #future
     # end
+
+
+    def type_colour(type)
+      colour_scheme = {
+        'fire' => '#F08030',
+        'grass' => '#78C850',
+        'electric' => '#F8D030',
+        'water' => '#6890F0',
+        'poison' => '#A040A0',
+        'ground' => '#E0C068',
+        'psychic' => '#F85888',
+        'bug' => '#A8B820',
+        'normal' => '#A8A878',
+        'flying' => '#A890F0',
+        'dragon' => '#7038F8',
+        'ice' => 	'#98D8D8',
+        'dark' => '#705848',
+        'fairy' => '#EE99AC',
+        'fighting' => '#C03028',
+        'ghost' => '#705898',
+        'rock' => '#B8A038',
+        'steel' => '#B8B8D0'
+      }
+      
+      if colour_scheme.has_key?(type.downcase)
+        return {type => colour_scheme[type.downcase]}
+      else
+        return {type => 'lightgray'}
+      end
+    end
+
 end
