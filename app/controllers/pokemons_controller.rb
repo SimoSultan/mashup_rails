@@ -52,19 +52,21 @@ class PokemonsController < ApplicationController
     }
   end
 
-  # def party
-  #   # show pokemon party 
-  #   @party = @@pokemons
-  # end
+  def party
+    # show pokemon party 
+    # @party = @@pokemons
+    @party = @@party
+  end
 
-  # def add
-  #   # add a pokemon to your party
-  #   # @@party.push(params)
-  # end
+  def add_to_party(params)
+    # add a pokemon to your party
+    @@party.push(params)
+    render plain: "#{params[:name]} added to party"
+  end
 
-  # def remove
-  #   # remove a pokemon from your party
-  # end
+  def remove_from_party
+    # remove a pokemon from your party
+  end
 
 
 

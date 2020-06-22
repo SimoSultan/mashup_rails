@@ -1,7 +1,7 @@
 <h1>The Original Kanto Pokemon</h1>
 
 <h6>
-  <%#= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
+  <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
 </h6>
 
 
@@ -26,7 +26,7 @@
       <td> <%= pok[:num] %>  </td>
       <td> <%= pok[:name].capitalize %> </td>
       <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
-      <td> <%#= link_to 'ADD TO PARTY', pokemons_show_path(pok[:name]), :class => 'add-to-party' %> </td>
+      <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok), :class => 'add-to-party' %> </td>
     </tr>
   <% end %>
 

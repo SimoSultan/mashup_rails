@@ -28,8 +28,8 @@ Rails.application.routes.draw do
 
   # POKEMON
   get '/pokemons', to: "pokemons#home", as: "pokemons_home"
-  get 'pokemons/:name', to: "pokemons#show", as:"pokemons_show"
-  # get 'pokemons/party', to: "pokemons#party", as: "pokemons_party"
-  # post 'pokemons/add', to: "pokemons#add", as: "pokemons_party_add"
-  # delete 'pokemons/remove', to: "pokemons#remove", as: "pokemons_party_remove"
+  get '/pokemons/party', to: "pokemons#party", as: "pokemons_party"
+  post '/pokemons/add', to: "pokemons#add_to_party", as: "pokemons_party_add"
+  # delete 'pokemons/remove', to: "pokemons#remove_from_party", as: "pokemons_party_remove"
+  get '/pokemons/:name', to: "pokemons#show", as:"pokemons_show"
 end
