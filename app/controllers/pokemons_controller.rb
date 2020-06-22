@@ -10,6 +10,13 @@ class PokemonsController < ApplicationController
 
   def home
     @all_pokemon = @@pokemons
+
+    @all_pokemon.each do |pokemon|
+      if pokemon[:name] == params['pokemon_name']
+        @all_pokemon = [pokemon]
+      end
+    end
+    @all_pokemon
   end
 
   def show

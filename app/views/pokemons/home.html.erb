@@ -1,34 +1,11 @@
 <h1>The Original Kanto Pokemon</h1>
 
 
-<% 
-=begin
-%> 
-
-<% @pokemon.each do |pok| %>
-
-    <div class="row">
-    <div class="col s12 m2">
-      <div class="card">
-        <div class="card-image">
-          <%= image_tag pok[:image]%>
-          <span class="card-title" style="color:black">#<%= pok[:num] %> <%= pok[:name] %> </span>
-        </div>
-        <div class="card-content">
-          <p><%= pok[:description] %></p>
-        </div>
-        <div class="card-action">
-          <a href="#"> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]) %> </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<% end %>
-
-<% 
-=end 
-%>
+<form action="<%=pokemons_home_path%>" method = "GET">
+  <label for="poke_name"></label>
+  <input type="text" name="pokemon_name" id="poke_name" style="width:50%">
+  <input type="submit" value="Search">
+</form>
 
 <section class="home-container">
 <table class="highlight">
