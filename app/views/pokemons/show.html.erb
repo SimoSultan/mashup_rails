@@ -50,9 +50,13 @@
               <%description.each do |k,v| %>
                 
                 <% if k.to_s == 'weight' %>
-                  <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s + 'kg' %></p>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s + 'kg' %></p>
+                  <%elsif k.to_s == 'type1' || k.to_s == 'type2'%>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': '%>
+                      <span style="color: <%=v.values[0]%>"><%=v.keys[0]%></span>
+                    </p>
                 <% else %>
-                  <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s %></p>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s %></p>
                 <% end %>
                 
               <% end %>
