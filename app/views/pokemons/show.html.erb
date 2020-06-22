@@ -17,8 +17,12 @@
           base_exp: @pokemon[:base_exp]
           } %>
           <% poke[:image] = "https://pokeres.bastionbot.org/images/pokemon/#{poke[:num]}.png"%>
+          <%# link = ""%>
+          <%# link_text = ""%>
       <% else %>     
         <% card_size = "m2" %>
+        <%# link = pokemons_show_path(poke[:evolutions][:name]) %>
+        <%# link_text = "FIND OUT MORE"%>
         <% if index == 0 %>
           <% description = {
             description: "BASE FORM",
@@ -46,9 +50,13 @@
               <%description.each do |k,v| %>
                 
                 <% if k.to_s == 'weight' %>
-                  <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s + 'kg' %></p>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s + 'kg' %></p>
+                  <%elsif k.to_s == 'type1' || k.to_s == 'type2'%>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': '%>
+                      <span style="color: <%=v.values[0]%>"><%=v.keys[0]%></span>
+                    </p>
                 <% else %>
-                  <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s %></p>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s %></p>
                 <% end %>
                 
               <% end %>

@@ -7,7 +7,6 @@ class PokemonsController < ApplicationController
 
   before_action :catch_all_og_pokemon
   @@pokemons = []
-  @@party = []
 
   def home
     @all_pokemon = @@pokemons
@@ -38,7 +37,10 @@ class PokemonsController < ApplicationController
     evolutions = get_all_evolutions(evolution_chain_url) #=> an array of strings
 
     evolutions = check_if_pokemon_are_all_in_original(evolutions) #=> an array of hashes of basic pokemon info 
- 
+
+    type1 = type_colour(type1)
+    type2 = type_colour(type2)
+
     @pokemon = {
       name: name, 
       num: 1, 
@@ -51,27 +53,6 @@ class PokemonsController < ApplicationController
       evolutions: evolutions,
     }
   end
-
-  def party
-    # show pokemon party 
-    # @party = @@pokemons
-    @party = @@party
-  end
-
-  def add_to_party(params)
-    # add a pokemon to your party
-    @@party.push(params)
-    render plain: "#{params[:name]} added to party"
-  end
-
-  def remove_from_party
-    # remove a pokemon from your party
-  end
-
-
-
-
-
 
 
   private 
@@ -127,6 +108,10 @@ class PokemonsController < ApplicationController
     def evolves?(form) #evolution_chain["chain"]
       form["evolves_to"].empty? ? false : true
     end
+    
+    # def is_eevee?(base_form)
+    #   @@pokemons.any? {|h| h[:name] == base_form.downcase} ? true : false
+    # end
 
 
     def check_if_pokemon_are_all_in_original(pokemon_arr)
@@ -143,4 +128,35 @@ class PokemonsController < ApplicationController
 
     # def is_baby? #future
     # end
+
+
+    def type_colour(type)
+      colour_scheme = {
+        'fire' => '#F08030',
+        'grass' => '#78C850',
+        'electric' => '#F8D030',
+        'water' => '#6890F0',
+        'poison' => '#A040A0',
+        'ground' => '#E0C068',
+        'psychic' => '#F85888',
+        'bug' => '#A8B820',
+        'normal' => '#A8A878',
+        'flying' => '#A890F0',
+        'dragon' => '#7038F8',
+        'ice' => 	'#98D8D8',
+        'dark' => '#705848',
+        'fairy' => '#EE99AC',
+        'fighting' => '#C03028',
+        'ghost' => '#705898',
+        'rock' => '#B8A038',
+        'steel' => '#B8B8D0'
+      }
+      
+      if colour_scheme.has_key?(type.downcase)
+        return {type => colour_scheme[type.downcase]}
+      else
+        return {type => 'lightgray'}
+      end
+    end
+
 end
