@@ -11,6 +11,9 @@ require 'csv'
 require 'json'
 
 $species_csv = CSV.parse(File.read('../lib/assets/pokemon_species.csv'), headers: true)
+$pokemons_csv = CSV.parse(File.read('../lib/assets/pokemon.csv'), headers: true)
+$description_csv = CSV.parse(File.read('../lib/assets/pokemon_species_flavor_text.csv'), headers: true)
+ 
 
 
 # home page
@@ -31,23 +34,26 @@ def catch_all_og_pokemon
   min_data
 end
 
-# pokemons = catch_all_og_pokemon
+def extract_description #returns an array of description; one for each pokemon
+  arr_of_description = Array.new
+  counter = 1
+  $description_csv.each do |poke_info|
+  if poke_info['species_id'].to_i == counter
+    arr_of_description.push(poke_info['flavor_text'])
+    counter += 1
+  end
+  end
+  arr_of_description
+end
 
-# pokemons.each.with_index do |poke_hash, index|
-#   response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{poke_hash[:name]}")
-#   data = response.parsed_response
-#   base_exp = data["base_experience"]
-#   weight = data["weight"]
-#   type1 = data["types"][0]["type"]["name"]
-#   if data["types"][1]
-#     type2 = data["types"][1]["type"]["name"]
-#   else
-#     type2 = "none"
-#   end
+pokemons = catch_all_og_pokemon
+description = extract_description
 
-#   # name = data_csv[0]['identifier'] #=> bulbasaur
-#   evolution_chain_id = $species_csv[index]['evolution_chain_id'] #=> bulbasaur
-#   evolution = 
+pokemons = pokemons.each_with_index do |pokemon, i|
+  pokemon[:weight] = $pokemons_csv[i]['weight']
+  pokemon[:base_exp] = $pokemons_csv[i]['base_experience']
+  pokemon[:description] = description[i]
+end
 
 
 #   Pokemon.create(name: poke_hash[:name], image: poke_hash[:image], base_exp: base_exp, weight: weight, type1: type1, type2: type2, )
@@ -78,54 +84,3 @@ def get_poke_deets(name)
 
   # return poke_deets_arr
 end
-
-
-evolution_chain_id = $species_csv[130]['evolution_chain_id'] #=> bulbasaur
-puts evolution_chain_id
-
-
-def get_all_evolutions(id)
-  # id = id.to_i
-  puts id
-  arr = []
-  $species_csv.each do |poke|
-    puts poke['identifier']
-
-    # break if poke['evolution_chain_id'] > id
-    arr.push(poke['identifier']) if id == poke['evolution_chain_id']
-  end
-  return arr
-end
-
-
-puts get_all_evolutions(evolution_chain_id)
-
-# def get_all_evolutions(url)
-#   arr = []
-#   evolution_chain = HTTParty.get(url)
-#   evolution_chain = evolution_chain.parsed_response
-
-#   base_form = evolution_chain["chain"]["species"]["name"].capitalize #Bulbasaur / #Eevee
-#   arr.push(base_form)
-#   return arr if evolves?(evolution_chain["chain"]) == false
-
-#   if base_form.downcase == "eevee"
-#     alt_evo0 = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Vaporeon
-#     alt_evo1 = evolution_chain["chain"]["evolves_to"][1]["species"]["name"].capitalize #Jolteon
-#     alt_evo2 = evolution_chain["chain"]["evolves_to"][2]["species"]["name"].capitalize #Flareon
-#     arr.push(alt_evo0, alt_evo1, alt_evo2)
-#     return arr
-#   end
-
-#   second_form = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Ivysaur
-#   arr.push(second_form)
-#   return arr if evolves?(evolution_chain["chain"]["evolves_to"][0]) == false
-
-#   third_form = evolution_chain["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"].capitalize #Venusaur
-#   arr.push(third_form)
-
-#   return arr #array of strings
-
-# end
-
-
