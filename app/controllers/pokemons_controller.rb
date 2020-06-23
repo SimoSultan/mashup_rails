@@ -1,15 +1,13 @@
-# require 'net/http'
-# require 'json'
-# require 'poke-api-v2'
+
 require 'httparty'
 
 class PokemonsController < ApplicationController
 
-  before_action :catch_all_og_pokemon
-  @@pokemons = []
+  # before_action :catch_all_og_pokemon
 
   def home
-    @all_pokemon = @@pokemons
+    # @all_pokemon = @@pokemons
+    @all_pokemon = Pokemon.all
 
     @all_pokemon.each do |pokemon|
       if pokemon[:name] == params['pokemon_name']
@@ -20,21 +18,21 @@ class PokemonsController < ApplicationController
   end
 
   def show
-    pokemon_name = params["name"].downcase
-    response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{pokemon_name}")
-    data = response.parsed_response
-    name = pokemon_name.capitalize
-    num = data["id"]
-    base_exp = data["base_experience"]
-    weight = data["weight"]
-    image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
-    abilities = data["abilities"]
-    type1 = data["types"][0]["type"]["name"].capitalize
-    if data["types"][1]
-      type2 = data["types"][1]["type"]["name"].capitalize
-    else
-      type2 = "None"
-    end
+    # pokemon_name = params["name"].downcase
+    # response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{pokemon_name}")
+    # data = response.parsed_response
+    # name = pokemon_name.capitalize
+    # num = data["id"]
+    # base_exp = data["base_experience"]
+    # weight = data["weight"]
+    # image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
+    # abilities = data["abilities"]
+    # type1 = data["types"][0]["type"]["name"].capitalize
+    # if data["types"][1]
+    #   type2 = data["types"][1]["type"]["name"].capitalize
+    # else
+    #   type2 = "None"
+    # end
     
     species = HTTParty.get("https://pokeapi.co/api/v2/pokemon-species/#{pokemon_name}")
     species = species.parsed_response
@@ -64,23 +62,23 @@ class PokemonsController < ApplicationController
 
   private 
 
-    def catch_all_og_pokemon
-      response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
-      data = response.parsed_response["results"]
-      @@pokemons = []
+    # def catch_all_og_pokemon
+    #   response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
+    #   data = response.parsed_response["results"]
+    #   @@pokemons = []
       
-      min_data = []
-      data.each do |h|
-        id = h["url"].scan(/\/\d{1,3}\//).first
-        id = id[1..-2]
-        name = h["name"]
-        url = h["url"]
-        image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
-        new_h = {name: name, num: id, image: image, url: url}
-        min_data.push(new_h)
-      end
-      @@pokemons = min_data
-    end
+    #   min_data = []
+    #   data.each do |h|
+    #     id = h["url"].scan(/\/\d{1,3}\//).first
+    #     id = id[1..-2]
+    #     name = h["name"]
+    #     url = h["url"]
+    #     image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
+    #     new_h = {name: name, num: id, image: image, url: url}
+    #     min_data.push(new_h)
+    #   end
+    #   @@pokemons = min_data
+    # end
 
 
     def get_all_evolutions(url)
