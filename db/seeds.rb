@@ -10,9 +10,11 @@ require 'httparty'
 require 'csv'
 require 'json'
 
-$species_csv = CSV.parse(File.read('../lib/assets/pokemon_species.csv'), headers: true)
 $pokemons_csv = CSV.parse(File.read('../lib/assets/pokemon.csv'), headers: true)
+$species_csv = CSV.parse(File.read('../lib/assets/pokemon_species.csv'), headers: true)
 $description_csv = CSV.parse(File.read('../lib/assets/pokemon_species_flavor_text.csv'), headers: true)
+$types_csv = CSV.parse(File.read('../lib/assets/types.csv'), headers: true)
+$poke_types = CSV.parse(File.read('../lib/assets/pokemon_types.csv'), headers: true)
  
 
 
@@ -22,13 +24,16 @@ def catch_all_og_pokemon
   data = response.parsed_response["results"]
   
   min_data = []
-  data.each do |h|
+  data.each.with_index do |h,i|
     id = h["url"].scan(/\/\d{1,3}\//).first
     id = id[1..-2]
     name = h["name"]
     url = h["url"]
     image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
-    new_h = {name: name, num: id, image: image, url: url}
+    evolution_chain_id = $species_csv[i]['evolution_chain_id'] #=> bulbasaur
+    evolutions = get_all_evolutions(evolution_chain_id)
+
+    new_h = {name: name, num: id, image: image, url: url, evolutions: evolutions}
     min_data.push(new_h)
   end
   min_data
@@ -46,18 +51,60 @@ def extract_description #returns an array of description; one for each pokemon
   arr_of_description
 end
 
-pokemons = catch_all_og_pokemon
-description = extract_description
+def extract_types #returns an array that has an array of types; one for each pokemon
+  types_hash = Hash.new
+  $types_csv.each do |type|
+    types_hash[type['id']] = type['identifier']
+  end
+  
+  array_of_types = Array.new
+  #Each element in the array can be another array of types, depending on the pokemon.
+  #index 0 will be for bulbasaur and so forth.
+  counter = 1
+  array_of_subtype = Array.new
+  $poke_types.each do |type|
+    if counter == type['pokemon_id'].to_i
+      array_of_subtype.push(types_hash[type['type_id']])
+    else
+      array_of_types.push(array_of_subtype)
+      array_of_subtype = Array.new
+      array_of_subtype.push(types_hash[type['type_id']])
+      counter += 1
+    end
+  end
+
+  array_of_types.each{|arr| arr.push("none") if arr.length == 1}
+end
+
+
+def get_all_evolutions(id)
+  arr = []
+  $species_csv.each do |poke|
+    # break if poke['evolution_chain_id'] > id
+    arr.push(poke['identifier']) if id == poke['evolution_chain_id']
+  end
+  return arr
+end
+
+
+pokemons = catch_all_og_pokemon()
+description = extract_description()
+types = extract_types()
+
+
+
+# BUILD POKEMON DATABASE
+
 
 pokemons = pokemons.each_with_index do |pokemon, i|
   pokemon[:weight] = $pokemons_csv[i]['weight']
   pokemon[:base_exp] = $pokemons_csv[i]['base_experience']
   pokemon[:description] = description[i]
+  pokemon[:type1] = types[i].first
+  pokemon[:type2] = types[i].last
+
+  Pokemon.create(name: pokemon[:name], image: pokemon[:image], base_exp: pokemon[:base_exp], weight: pokemon[:weight], type1: pokemon[:type1], type2: pokemon[:type2], description: pokemon[:description], evolutions: pokemon[:evolutions] )
 end
-
-
-#   Pokemon.create(name: poke_hash[:name], image: poke_hash[:image], base_exp: base_exp, weight: weight, type1: type1, type2: type2, )
-# end
 
 
 #show
