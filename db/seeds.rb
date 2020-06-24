@@ -10,15 +10,17 @@ require 'httparty'
 require 'csv'
 require 'json'
 
-$pokemons_csv = CSV.parse(File.read('../lib/assets/pokemon.csv'), headers: true)
-$species_csv = CSV.parse(File.read('../lib/assets/pokemon_species.csv'), headers: true)
-$description_csv = CSV.parse(File.read('../lib/assets/pokemon_species_flavor_text.csv'), headers: true)
-$types_csv = CSV.parse(File.read('../lib/assets/types.csv'), headers: true)
-$poke_types = CSV.parse(File.read('../lib/assets/pokemon_types.csv'), headers: true)
+#reads csv files to be stored in the database
+$pokemons_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon.csv')), headers: true)
+$species_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_species.csv')), headers: true)
+$description_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_species_flavor_text.csv')), headers: true)
+$types_csv = CSV.parse(File.read(Rails.root.join('lib','assets','types.csv')), headers: true)
+$poke_types = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_types.csv')), headers: true)
  
 
 
-# home page
+# home page; submits a get request from the pokeAPI.
+# Pokemon details returned would then be stored in the DB.
 def catch_all_og_pokemon
   response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
   data = response.parsed_response["results"]
@@ -39,7 +41,9 @@ def catch_all_og_pokemon
   min_data
 end
 
-def extract_description #returns an array of description; one for each pokemon
+# Extracts description of a pokemon from the csv file and
+#returns an array of description; one for each pokemon
+def extract_description
   arr_of_description = Array.new
   counter = 1
   $description_csv.each do |poke_info|
@@ -51,7 +55,11 @@ def extract_description #returns an array of description; one for each pokemon
   arr_of_description
 end
 
-def extract_types #returns an array that has an array of types; one for each pokemon
+# Extracts types of the pokemon from the csv file and
+#returns an array that has an array of the types of the pokemon
+# if the pokemon has only one type, a default value of 'none'
+# would be its type2
+def extract_types
   types_hash = Hash.new
   $types_csv.each do |type|
     types_hash[type['id']] = type['identifier']
@@ -76,11 +84,11 @@ def extract_types #returns an array that has an array of types; one for each pok
   array_of_types.each{|arr| arr.push("none") if arr.length == 1}
 end
 
-
+# Gets the evelution chain of the pokemon from the csv file
+# then returns it as an array
 def get_all_evolutions(id)
   arr = []
   $species_csv.each do |poke|
-    # break if poke['evolution_chain_id'] > id
     arr.push(poke['identifier']) if id == poke['evolution_chain_id']
   end
   return arr
@@ -104,30 +112,4 @@ pokemons = pokemons.each_with_index do |pokemon, i|
   pokemon[:type2] = types[i].last
 
   Pokemon.create(name: pokemon[:name], image: pokemon[:image], base_exp: pokemon[:base_exp], weight: pokemon[:weight], type1: pokemon[:type1], type2: pokemon[:type2], description: pokemon[:description], evolutions: pokemon[:evolutions] )
-end
-
-
-#show
-def get_poke_deets(name)
-  # poke_deets_arr = Array.new
-  # pokemon_name = params["name"].downcase
-  # response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{name}")
-  # data = response.parsed_response
-  # name = pokemon_name.capitalize
-  # num = data["id"]
-  # base_exp = data["base_experience"]
-
-  # weight = data["weight"]
-
-  image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
-  # abilities = data["abilities"]
-  # type1 = data["types"][0]["type"]["name"].capitalize
-  # if data["types"][1]
-  #   type2 = data["types"][1]["type"]["name"].capitalize
-  # else
-  #   type2 = "None"
-  # end
-  # poke_deets_arr.push(base_exp, weight, type1, type2)
-
-  # return poke_deets_arr
 end

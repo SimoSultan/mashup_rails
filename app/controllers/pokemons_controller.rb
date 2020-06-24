@@ -1,141 +1,47 @@
 
-require 'httparty'
 
 class PokemonsController < ApplicationController
 
-  # before_action :catch_all_og_pokemon
 
   def home
-    # @all_pokemon = @@pokemons
+    # get all the pokemon from the database
     @all_pokemon = Pokemon.all
 
-    @all_pokemon.each do |pokemon|
-      if pokemon[:name] == params['pokemon_name']
-        @all_pokemon = [pokemon]
+    # if someone has searched for a pokemon
+    # then search through list
+    if !params['pokemon_name'].nil?
+      @search_pokemon = Array.new
+      @all_pokemon.each do |pokemon|
+        if pokemon[:name].include?(params['pokemon_name'])
+          @search_pokemon.push(pokemon)
+        end
       end
+
+      return @search_pokemon.empty? ? @all_pokemon : (@all_pokemon = @search_pokemon)
     end
-    @all_pokemon
   end
 
   def show
-    # pokemon_name = params["name"].downcase
-    # response = HTTParty.get("https://pokeapi.co/api/v2/pokemon/#{pokemon_name}")
-    # data = response.parsed_response
-    # name = pokemon_name.capitalize
-    # num = data["id"]
-    # base_exp = data["base_experience"]
-    # weight = data["weight"]
-    # image = "https://pokeres.bastionbot.org/images/pokemon/#{num}.png"
-    # abilities = data["abilities"]
-    # type1 = data["types"][0]["type"]["name"].capitalize
-    # if data["types"][1]
-    #   type2 = data["types"][1]["type"]["name"].capitalize
-    # else
-    #   type2 = "None"
-    # end
+    # get the requested pokemon information from database for show page
+    @pokemon = Pokemon.find_by_name(params[:name])
+    # if the pokemon has more than itself in the array of string in evolutions
+    # then turn the string into an object received from the DB
+    if @pokemon[:evolutions].length > 1
+      @pokemon[:evolutions].each.with_index do |poke_name, i|
+        @pokemon[:evolutions][i] = Pokemon.find_by_name(poke_name)
+      end
+    end
     
-    species = HTTParty.get("https://pokeapi.co/api/v2/pokemon-species/#{pokemon_name}")
-    species = species.parsed_response
-    description = species["flavor_text_entries"][0]["flavor_text"]
-
-    evolution_chain_url = species["evolution_chain"]["url"]
-    evolutions = get_all_evolutions(evolution_chain_url) #=> an array of strings
-
-    evolutions = check_if_pokemon_are_all_in_original(evolutions) #=> an array of hashes of basic pokemon info 
-
-    type1 = type_colour(type1)
-    type2 = type_colour(type2)
-
-    @pokemon = {
-      name: name, 
-      num: 1, 
-      image: image, 
-      description: description, 
-      type1: type1, 
-      type2: type2, 
-      weight: weight, 
-      base_exp: base_exp,
-      evolutions: evolutions,
-    }
+    # sets the type as the key and colour as the value
+    @pokemon_type1_colour = type_colour(@pokemon[:type1])
+    @pokemon_type2_colour = type_colour(@pokemon[:type2])
   end
 
 
   private 
 
-    # def catch_all_og_pokemon
-    #   response = HTTParty.get("https://pokeapi.co/api/v2/pokemon?limit=151")
-    #   data = response.parsed_response["results"]
-    #   @@pokemons = []
-      
-    #   min_data = []
-    #   data.each do |h|
-    #     id = h["url"].scan(/\/\d{1,3}\//).first
-    #     id = id[1..-2]
-    #     name = h["name"]
-    #     url = h["url"]
-    #     image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/#{id}.png"
-    #     new_h = {name: name, num: id, image: image, url: url}
-    #     min_data.push(new_h)
-    #   end
-    #   @@pokemons = min_data
-    # end
-
-
-    def get_all_evolutions(url)
-      arr = []
-      evolution_chain = HTTParty.get(url)
-      evolution_chain = evolution_chain.parsed_response
-
-      base_form = evolution_chain["chain"]["species"]["name"].capitalize #Bulbasaur / #Eevee
-      arr.push(base_form)
-      return arr if evolves?(evolution_chain["chain"]) == false
-    
-      if base_form.downcase == "eevee"
-        alt_evo0 = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Vaporeon
-        alt_evo1 = evolution_chain["chain"]["evolves_to"][1]["species"]["name"].capitalize #Jolteon
-        alt_evo2 = evolution_chain["chain"]["evolves_to"][2]["species"]["name"].capitalize #Flareon
-        arr.push(alt_evo0, alt_evo1, alt_evo2)
-        return arr
-      end
-
-      second_form = evolution_chain["chain"]["evolves_to"][0]["species"]["name"].capitalize #Ivysaur
-      arr.push(second_form)
-      return arr if evolves?(evolution_chain["chain"]["evolves_to"][0]) == false
-
-      third_form = evolution_chain["chain"]["evolves_to"][0]["evolves_to"][0]["species"]["name"].capitalize #Venusaur
-      arr.push(third_form)
-
-      return arr #array of strings
-
-    end
-
-  
-    def evolves?(form) #evolution_chain["chain"]
-      form["evolves_to"].empty? ? false : true
-    end
-    
-    # def is_eevee?(base_form)
-    #   @@pokemons.any? {|h| h[:name] == base_form.downcase} ? true : false
-    # end
-
-
-    def check_if_pokemon_are_all_in_original(pokemon_arr)
-      new_arr = []
-      pokemon_arr.each do |pok|
-        @@pokemons.any? do |h| 
-          if h[:name] == pok.downcase
-            new_arr.push(h) 
-          end
-        end
-      end
-      return new_arr
-    end
-
-    # def is_baby? #future
-    # end
-
-
     def type_colour(type)
+
       colour_scheme = {
         'fire' => '#F08030',
         'grass' => '#78C850',
@@ -158,10 +64,11 @@ class PokemonsController < ApplicationController
       }
       
       if colour_scheme.has_key?(type.downcase)
-        return {type => colour_scheme[type.downcase]}
+        return {type.downcase => colour_scheme[type.downcase]}
       else
-        return {type => 'lightgray'}
+        return {type.downcase => 'lightgray'}
       end
+
     end
 
 end

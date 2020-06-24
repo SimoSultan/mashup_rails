@@ -1,5 +1,6 @@
 
-<h2><%= @pokemon[:name]%></h2>
+<h2><%= @pokemon[:name].capitalize%></h2>
+<%= link_to 'Back', pokemons_home_path, :class=> "waves-effect waves-light btn" %>
 
 <section class="show-container">
     
@@ -16,25 +17,24 @@
           weight: @pokemon[:weight],
           base_exp: @pokemon[:base_exp]
           } %>
-          <% poke[:image] = "https://pokeres.bastionbot.org/images/pokemon/#{poke[:num]}.png"%>
-          <%# link = ""%>
-          <%# link_text = ""%>
+          <% poke[:image] = "https://pokeres.bastionbot.org/images/pokemon/#{poke[:id]}.png"%>
       <% else %>     
         <% card_size = "m2" %>
-        <%# link = pokemons_show_path(poke[:evolutions][:name]) %>
-        <%# link_text = "FIND OUT MORE"%>
+
         <% if index == 0 %>
-          <% description = {
-            description: "BASE FORM",
-          } %>
+          <% description = { description: "BASE FORM" } %>
         <% elsif index == 1 %>
-          <% description = {
-            description: "SECOND FORM",
-          } %>
+          <% description = { description: "SECOND FORM" } %>
         <% else %>
-          <% description = {
-            description: "FINAL FORM",
-          } %>
+          <% description = { description: "FINAL FORM" } %>
+        <% end %>
+
+        <% if poke[:name].downcase == 'vaporeon' %>
+          <% description = { description: "EVOLVES USING WATER STONE" } %>
+        <% elsif poke[:name].downcase == 'flareon' %>
+          <% description = { description: "EVOLVES USING FIRE STONE" } %>
+        <% elsif poke[:name].downcase == 'jolteon' %>
+          <% description = { description: "EVOLVES USING THUNDER STONE" } %>
         <% end %>
       <% end %>
 
@@ -45,15 +45,20 @@
               <%= image_tag poke[:image]%>
             </div>
             <div class="card-content">
-              <span class="card-title" style="color:black">#<%= poke[:num] %> <%= poke[:name].capitalize %> </span>
+              <span class="card-title" style="color:black">#<%= poke[:id] %> <%= poke[:name].capitalize %> </span>
 
               <%description.each do |k,v| %>
-                
+                <%# puts k, v %>
+                <%# puts k %>
                 <% if k.to_s == 'weight' %>
                     <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s + 'kg' %></p>
-                  <%elsif k.to_s == 'type1' || k.to_s == 'type2'%>
+                <%elsif k.to_s == 'type1'%>
                     <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': '%>
-                      <span style="color: <%=v.values[0]%>"><%=v.keys[0]%></span>
+                      <span style="color: <%= @pokemon_type1_colour.values[0] %>"><%= @pokemon_type1_colour.keys[0].capitalize %></span>
+                    </p>
+                <%elsif k.to_s == 'type2'%>
+                    <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': '%>
+                      <span style="color: <%= @pokemon_type2_colour.values[0] %>"><%= @pokemon_type2_colour.keys[0].capitalize %></span>
                     </p>
                 <% else %>
                     <p><%= k.to_s.capitalize.gsub(/_/,' ') + ': ' + v.to_s %></p>
@@ -72,7 +77,6 @@
   
   </div>
   
-  <%= link_to 'Back', pokemons_home_path, :class=> "waves-effect waves-light btn" %>
 
 </section>
 
