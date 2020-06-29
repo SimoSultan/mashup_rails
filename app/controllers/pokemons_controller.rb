@@ -1,8 +1,6 @@
-
-
 class PokemonsController < ApplicationController
-
-  @@party = []
+  skip_before_action :verify_authenticity_token
+  before_action :setup_party
 
   def home
     # get all the pokemon from the database
@@ -22,6 +20,33 @@ class PokemonsController < ApplicationController
     end
   end
 
+
+  def party
+    @party = []
+    session[:party].each do |name_str|
+      pokemon = Pokemon.find_by_name(name_str)
+      @party.push(pokemon)
+    end
+    @party
+  end
+
+  def add_to_party
+
+    # if session[:party].length >= 6
+    # end
+
+    session[:party].push(params[:name])
+    puts "added #{params[:name]} to party"
+  end
+
+  def remove_from_party
+    session[:party].delete(params[:name]) 
+    puts "removed #{params[:name]} from party"
+    party()
+    render 'party'
+  end
+
+
   def show
     # get the requested pokemon information from database for show page
     @pokemon = Pokemon.find_by_name(params[:name])
@@ -38,16 +63,19 @@ class PokemonsController < ApplicationController
     @pokemon_type2_colour = type_colour(@pokemon[:type2])
   end
 
-  def party
-    @party = @@party
+
+
+
+
+  def reset_session
+    session.clear
+    puts "session = #{session[:party]}"
   end
 
-  def add_to_party
+  def log_session
+    puts "session = #{session[:party]}"
   end
 
-  def remove_from_party
-
-  end
 
 
   private 
@@ -81,6 +109,13 @@ class PokemonsController < ApplicationController
         return {type.downcase => 'lightgray'}
       end
 
+    end
+
+    def setup_party
+      # session.clear
+      if session[:party] == nil
+        session[:party] = []
+      end
     end
 
 end

@@ -5,44 +5,37 @@
 
 <section class="home-container">
 
-
-
-<% if @party.empty? %>
-  <p>You don't have any pokemon in your party yet.</p>
-  <p>Go back to homepage to add them.</p>
+  <% if @party.empty? %>
+    <p>You don't have any pokemon in your party yet.</p>
+    <p>Go back to homepage to add them.</p>
   <% else %>
 
-  <table class="highlight">
-  <thead>
-    <tr>
-        <th>Image</th>
-        <th>#</th>
-        <th>Name</th>
-        <% if false %>
-        <th>About</th>
-        <th>Remove</th>
-        <% end %>
-    </tr>
-  </thead>
+    <table class="highlight">
+      <thead>
+        <tr>
+            <th>Image</th>
+            <th>#</th>
+            <th>Name</th>
+            <th>About</th>
+            <th>Remove</th>
+        </tr>
+      </thead>
 
-  <tbody>
- 
-  <% @party.each do |pok| %>
+      <tbody>
+    
+      <% @party.each do |pok| %>
+        <tr>
+          <td> <%= image_tag pok['image']%></td>
+          <td> <%= pok['id'] %>  </td>
+          <td> <%= pok['name'].capitalize %> </td>
+          <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok['name']), :class => 'find-out-more' %> </td>
+          <td> <%= link_to 'REMOVE FROM PARTY', pokemons_party_remove_path(pok['name']), :class => 'remove-from-party', method: 'delete' %> </td>
+        </tr>
+      <% end %>
 
-    <tr>
-      <td> <%= image_tag pok[:image]%></td>
-      <td> <%= pok[:num] %>  </td>
-      <td> <%= pok[:name].capitalize %> </td>
-      <td> <%#= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
-      <td> <%#= link_to 'REMOVE FROM PARTY', pokemons_party_remove_path(pok[:name]), :class => 'remove-from-party' %> </td>
-    </tr>
+      </tbody>
+    </table> 
   <% end %>
-
-  </tbody>
-</table>
-  
-<% end %>
-
 
 </section>
 

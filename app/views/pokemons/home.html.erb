@@ -3,6 +3,8 @@
 <h6>
   <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
   <%= link_to 'SHOW ALL POKEMON', pokemons_home_path, :class => 'show-all-pokemon' %>
+  <%= link_to 'RESET SESSION', pokemons_reset_session_path, :class => 'show-all-pokemon', method: 'post' %>
+  <%= link_to 'LOG SESSION', pokemons_log_session_path, :class => 'show-all-pokemon', method: 'post' %>
 </h6>
 
 
@@ -29,13 +31,12 @@
   <tbody>
  
   <% @all_pokemon.each do |pok| %>
-
     <tr>
       <td> <%= image_tag pok[:image]%></td>
       <td> <%= pok[:id] %>  </td>
       <td> <%= pok[:name].capitalize %> </td>
       <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
-      <td> <%#= link_to 'ADD TO PARTY', pokemons_party_add_path(pok), :class => 'add-to-party' %> </td>
+      <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok[:name]), :class => 'add-to-party', method: 'post' %> </td>
     </tr>
   <% end %>
 

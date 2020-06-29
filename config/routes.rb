@@ -24,12 +24,19 @@ Rails.application.routes.draw do
   get "/products", to: "products#home", as:"products_home"
 
   # PHOTOS
-  get 'photos/home', to: "photos#home", as: "photos_home"
+  get '/photos/home', to: "photos#home", as: "photos_home"
 
   # POKEMON
   get '/pokemons', to: "pokemons#home", as: "pokemons_home"
   get '/pokemons/party', to: "pokemons#party", as: "pokemons_party"
-  post '/pokemons/add', to: "pokemons#add_to_party", as: "pokemons_party_add"
-  # delete 'pokemons/remove', to: "pokemons#remove_from_party", as: "pokemons_party_remove"
   get '/pokemons/:name', to: "pokemons#show", as:"pokemons_show"
+
+
+  post '/pokemons/reset', to: "pokemons#reset_session", as:"pokemons_reset_session"
+  post '/pokemons/log', to: "pokemons#log_session", as:"pokemons_log_session"
+  post '/pokemons/:name', to: "pokemons#add_to_party", as: "pokemons_party_add"
+  delete '/pokemons/:name', to: "pokemons#remove_from_party", as: "pokemons_party_remove"
+
+
+
 end
