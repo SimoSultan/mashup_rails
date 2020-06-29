@@ -1,0 +1,15 @@
+<h1>Sign up page</h1>
+
+
+<%=form_with(url: pokemons_signed_up_path) do %>
+  <%= label_tag(:name, "Name: ")%>
+  <%= text_field_tag(:name) %>
+
+  <%= label_tag(:email, "Email: ")%>
+  <%= email_field(:user, :email) %>
+
+  <%= label_tag(:password, "Password: ")%>
+  <%= password_field_tag(:password) %>
+
+  <%= submit_tag("Sign Up") %>
+<%end%>

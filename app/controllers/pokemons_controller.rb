@@ -19,6 +19,15 @@ class PokemonsController < ApplicationController
 
       return @search_pokemon.empty? ? @all_pokemon : (@all_pokemon = @search_pokemon)
     end
+
+    #for user
+    if session[:users].nil?
+      session[:users] = Hash.new
+      session[:passwords] = Hash.new
+    else
+      # @user = {params[:name] => params[:user][:email]}
+      @user = session[:current_user]
+    end
   end
 
   def show
@@ -37,6 +46,40 @@ class PokemonsController < ApplicationController
     @pokemon_type2_colour = type_colour(@pokemon[:type2])
   end
 
+  def sign_in
+    
+  end
+  
+  def signed_in
+    if session[:users].has_value?(params[:user][:email])
+      user_email = params[:user][:email]
+      user_password = params[:password]
+      if session[:passwords][user_email] == user_password
+        user_name = session[:users].key(user_email)
+        session[:current_user] = {user_name => user_email}
+        redirect_to pokemons_home_path
+      else
+        redirect_to pokemons_sign_in_path
+      end
+      
+    else
+      redirect_to pokemons_sign_in_path
+    end
+  end
+
+  def sign_up
+
+  end
+
+  def signed_up
+    session[:users][params[:name]] = params[:user][:email]
+    session[:passwords][params[:user][:email]] = params[:password]
+    # session[:name].push(params[:name])
+    # session[:email].push(params[:user][:email])
+    # @user = {params[:name] => params[:user][:email]}
+    session[:current_user] = {params[:name] => params[:user][:email]}
+    redirect_to pokemons_home_path
+  end
 
   private 
 

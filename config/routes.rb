@@ -30,6 +30,14 @@ Rails.application.routes.draw do
   get '/pokemons', to: "pokemons#home", as: "pokemons_home"
   get '/pokemons/party', to: "pokemons#party", as: "pokemons_party"
   post '/pokemons/add', to: "pokemons#add_to_party", as: "pokemons_party_add"
+    #sign in/up
+  get '/pokemons/sign_in', to: "pokemons#sign_in", as: "pokemons_sign_in"
+  post '/pokemons/signed_in', to: "pokemons#signed_in", as: "pokemons_signed_in"
+  get '/pokemons/sign_up', to: "pokemons#sign_up", as: "pokemons_sign_up"
+  post '/pokemons/signed_up', to: "pokemons#signed_up", as: "pokemons_signed_up"
   # delete 'pokemons/remove', to: "pokemons#remove_from_party", as: "pokemons_party_remove"
   get '/pokemons/:name', to: "pokemons#show", as:"pokemons_show"
+
+
+
 end

@@ -1,8 +1,13 @@
 <h1>The Original Kanto Pokemon</h1>
 
+<%if !@user.nil? %>
+<h2>Welcome <%=@user.keys[0]%>!</h2>
+<%end%>
 <h6>
   <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
   <%= link_to 'SHOW ALL POKEMON', pokemons_home_path, :class => 'show-all-pokemon' %>
+  <%= link_to 'Sign In', pokemons_sign_in_path, :class => "waves-effect waves-light btn" %>
+  <%= link_to 'Sign Up', pokemons_sign_up_path, :class => "waves-effect waves-light btn" %>
 </h6>
 
 
