@@ -2,7 +2,16 @@
 
 <h6>
   <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
+  <%= link_to 'SHOW ALL POKEMON', pokemons_home_path, :class => 'show-all-pokemon' %>
 </h6>
+
+
+
+<form action="<%= pokemons_home_path %>" method = "GET">
+  <label for="poke_name"></label>
+  <input type="text" name="pokemon_name" id="poke_name" style="width:50%">
+  <input type="submit" value="Search">
+</form>
 
 
 <section class="home-container">
@@ -23,10 +32,10 @@
 
     <tr>
       <td> <%= image_tag pok[:image]%></td>
-      <td> <%= pok[:num] %>  </td>
+      <td> <%= pok[:id] %>  </td>
       <td> <%= pok[:name].capitalize %> </td>
       <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
-      <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok), :class => 'add-to-party' %> </td>
+      <td> <%#= link_to 'ADD TO PARTY', pokemons_party_add_path(pok), :class => 'add-to-party' %> </td>
     </tr>
   <% end %>
 
