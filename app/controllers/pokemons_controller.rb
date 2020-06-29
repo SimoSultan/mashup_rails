@@ -2,6 +2,7 @@
 
 class PokemonsController < ApplicationController
 
+  @@party = []
 
   def home
     # get all the pokemon from the database
@@ -35,6 +36,17 @@ class PokemonsController < ApplicationController
     # sets the type as the key and colour as the value
     @pokemon_type1_colour = type_colour(@pokemon[:type1])
     @pokemon_type2_colour = type_colour(@pokemon[:type2])
+  end
+
+  def party
+    @party = @@party
+  end
+
+  def add_to_party
+  end
+
+  def remove_from_party
+
   end
 
 

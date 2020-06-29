@@ -15,7 +15,7 @@ $pokemons_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon.csv'
 $species_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_species.csv')), headers: true)
 $description_csv = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_species_flavor_text.csv')), headers: true)
 $types_csv = CSV.parse(File.read(Rails.root.join('lib','assets','types.csv')), headers: true)
-$poke_types = CSV.parse(File.read(Rails.root.join('lib','assets','pokemon_types.csv')), headers: true)
+$poke_types = CSV.parse(File.read(Rails.root.join('lib','assets',rail'pokemon_types.csv')), headers: true)
  
 
 
