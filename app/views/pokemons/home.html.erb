@@ -1,13 +1,15 @@
 <h1>The Original Kanto Pokemon</h1>
 
-<h6>
-  <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'show-my-party' %>
-  <%= link_to 'SHOW ALL POKEMON', pokemons_home_path, :class => 'show-all-pokemon' %>
-  <%= link_to 'RESET SESSION', pokemons_reset_session_path, :class => 'show-all-pokemon', method: 'post' %>
-  <%= link_to 'LOG SESSION', pokemons_log_session_path, :class => 'show-all-pokemon', method: 'post' %>
-</h6>
+  <%= link_to 'SHOW MY PARTY', pokemons_party_path, :class => 'waves-effect waves-teal btn-flat' %>
+  <%= link_to 'SHOW ALL POKEMON', pokemons_home_path, :class => 'waves-effect waves-teal btn-flat' %>
+  <%= link_to 'RESET SESSION', pokemons_reset_session_path, :class => 'waves-effect waves-teal btn-flat', method: 'post' %>
+  <%= link_to 'LOG SESSION', pokemons_log_session_path, :class => 'waves-effect waves-teal btn-flat', method: 'post' %>
 
-
+<% flash.each do |type, msg| %>
+  <div>
+    <%= msg %>
+  </div>
+<% end %>
 
 <form action="<%= pokemons_home_path %>" method = "GET">
   <label for="poke_name"></label>
@@ -17,31 +19,34 @@
 
 
 <section class="home-container">
-<table class="highlight">
-  <thead>
-    <tr>
-        <th>Image</th>
-        <th>#</th>
-        <th>Name</th>
-        <th>About</th>
-        <th>Party</th>
-    </tr>
-  </thead>
+  <table class="highlight">
+    <thead>
+      <tr>
+          <th>Image</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>About</th>
+          <th>Party</th>
+      </tr>
+    </thead>
 
-  <tbody>
- 
-  <% @all_pokemon.each do |pok| %>
-    <tr>
-      <td> <%= image_tag pok[:image]%></td>
-      <td> <%= pok[:id] %>  </td>
-      <td> <%= pok[:name].capitalize %> </td>
-      <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
-      <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok[:name]), :class => 'add-to-party', method: 'post' %> </td>
-    </tr>
-  <% end %>
+    <tbody>
+  
+    <% @all_pokemon.each do |pok| %>
+      <tr>
+        <td> <%= image_tag pok[:image]%></td>
+        <td> <%= pok[:id] %>  </td>
+        <td> <%= pok[:name].capitalize %> </td>
+        <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok[:name]), :class => 'find-out-more' %> </td>
+        <td> <%= link_to 'ADD TO PARTY', pokemons_party_add_path(pok[:name]), :class => 'add-to-party', method: 'post' %> </td>
+      </tr>
+    <% end %>
 
-  </tbody>
-</table>
+    </tbody>
+  </table>
+  <% flash.each do |key, value| %>
+  <div class="alert"><%= value %></div>
+<% end %>
 </section>
 
 

@@ -29,7 +29,9 @@
           <td> <%= pok['id'] %>  </td>
           <td> <%= pok['name'].capitalize %> </td>
           <td> <%= link_to 'FIND OUT MORE', pokemons_show_path(pok['name']), :class => 'find-out-more' %> </td>
-          <td> <%= link_to 'REMOVE FROM PARTY', pokemons_party_remove_path(pok['name']), :class => 'remove-from-party', method: 'delete' %> </td>
+          <td> <%= link_to 'REMOVE FROM PARTY', pokemons_party_remove_path(pok['name']), data: {confirm: "Are you sure?"}, :class => 'remove-from-party', method: 'delete' %> </td>
+          <td> <%#= link_to 'REMOVE FROM PARTY', pokemons_party_remove_modal_path(pok['name']),  {:remote => true, 'data-toggle' => "modal", 'data-target' => '#party_remove_modal', class: 'waves-effect waves-green btn'}  %>
+ </td>
         </tr>
       <% end %>
 

@@ -1,0 +1,21 @@
+<h1>This is the Subject Edit Page</h1>
+
+<%= link_to 'Back', schools_subjects_path, :class=> "waves-effect waves-light btn" %>
+<%= link_to 'Home', schools_index_path, :class=> "waves-effect waves-light btn" %>
+
+<%= form_with model: @subject, url: schools_subject_update_path do |f| %>
+  <%#= f.hidden_field :id, value: @subject.id%>
+  <%#= f.label :name %>
+  <%#= f.text_field :name %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %><br/>
+
+  <%= f.label :student %>
+  <%= f.collection_select(:student_id, Student.all, :id, :name) %><br/>
+
+  <%= f.label :teacher %>
+  <%= f.collection_select(:teacher_id, Teacher.all, :id, :name) %><br/>
+
+  <%= f.submit "Update" %>
+<% end %>

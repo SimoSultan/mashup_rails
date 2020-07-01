@@ -1,0 +1,10 @@
+    <!-- Modal Structure -->
+  <div id="party_remove_modal" class="modal">
+    <div class="modal-content">
+      <h4>Remove from Party</h4>
+      <p>Are you sure you would like to remove <% @pokemon_name.capitalize %> from your party?/p>
+    </div>
+    <div class="modal-footer">
+      <%= link_to 'AGREE', pokemons_party_remove_path(@pokemon_name), :class => 'modal-close waves-effect waves-green btn', method: 'delete' %>
+    </div>
+  </div>

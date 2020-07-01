@@ -1,0 +1,12 @@
+<h1>This is the Teacher Edit Page</h1>
+
+<%= link_to 'Back', schools_teachers_path, :class=> "waves-effect waves-light btn" %>
+<%= link_to 'Home', schools_index_path, :class=> "waves-effect waves-light btn" %>
+
+<%= form_with model: @teacher, url: schools_teacher_update_path do |f| %>
+  <%= f.hidden_field :id, value: @teacher.id%>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br/>
+
+  <%= f.submit "Update" %>
+<% end %>

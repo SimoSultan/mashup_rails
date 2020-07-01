@@ -1,0 +1,33 @@
+<h1>This is the Teachers Page</h1>
+
+<%= link_to 'Back', schools_index_path, :class=> "waves-effect waves-light btn" %>
+<%= link_to 'Add Teacher', schools_teacher_new_path, :class=> "waves-effect waves-light btn" %>
+
+
+
+<ul class="collection with-header">
+  <li class="collection-header"><h4>Teacher Names</h4></li>
+  <% @teachers_all.each do |single| %>
+    <li class="collection-item"> 
+      <div style="width: 150px; display: inline-block"> 
+        <%= single.name.capitalize %> 
+      </div> 
+      <%= link_to 'Edit Teacher', schools_teacher_edit_path(single.id), :class=> "" %> - 
+      <%= link_to 'Delete Teacher', schools_teacher_destroy_path(single.id), :class=> "", method: :delete, data: { confirm: 'Are you sure?' } %>
+
+      <div style="margin-left: 30px; width: 200px; display: inline-block"> 
+        Students: 
+        <% single.students.each do |s| %>
+          <%= s[:name].capitalize %> <br>
+        <%end%>
+      </div> 
+
+      <div style="width: 200px; display: inline-block"> 
+        Subjects: 
+        <% single.subjects.each do |s| %>
+          <%= s[:name].capitalize %> <br>
+        <%end%>
+      </div> 
+    </li>
+  <% end %>
+</ul>

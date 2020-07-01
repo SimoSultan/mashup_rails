@@ -1,0 +1,29 @@
+<h1>This is the Subjects Page</h1>
+
+<%= link_to 'Back', schools_index_path, :class=> "waves-effect waves-light btn" %>
+<%= link_to 'Add Subject', schools_subject_new_path, :class=> "waves-effect waves-light btn" %>
+
+
+<ul class="collection">
+  <li class="collection-header"><h4>Subjects</h4></li>
+  <% @subjects_all.each do |single| %>
+    <li class="collection-item"> 
+
+      <div style="width: 75px; display: inline-block"> 
+        <%= single.name.capitalize %> 
+      </div> 
+
+      <%= link_to 'Edit Subject', schools_subject_edit_path(single.id) %> - 
+      <%= link_to 'Delete Subject', schools_subject_destroy_path(single.id), :class=> "", method: :delete, data: { confirm: 'Are you sure?' } %>
+
+      <div style="margin-left: 30px; width: 200px; display: inline-block"> 
+        Student: <%= single.student.name.capitalize %>
+      </div> 
+
+      <div style="width: 200px; display: inline-block"> 
+        Teacher: <%= single.teacher.name.capitalize %>
+      </div> 
+      
+    </li>
+  <% end %>
+</ul>

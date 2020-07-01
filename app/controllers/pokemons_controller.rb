@@ -32,11 +32,20 @@ class PokemonsController < ApplicationController
 
   def add_to_party
 
-    # if session[:party].length >= 6
-    # end
+    if session[:party].length >= 6
+      flash.alert = "Your party already contains 6 pokemon. You cannot add more."
+    end
 
     session[:party].push(params[:name])
     puts "added #{params[:name]} to party"
+  end
+
+  def show_party_remove_modal
+    respond_to do |format|
+      format.js { render :partial => '../javascript/party/remove.js.erb' }
+    end
+    @pokemon_name = params[:name]
+
   end
 
   def remove_from_party
