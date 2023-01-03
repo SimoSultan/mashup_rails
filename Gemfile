@@ -61,4 +61,4 @@ gem "json", "~> 2.3"
 
 gem "poke-api-v2", "~> 0.1.0"
 
-gem "httparty", "~> 0.18.1"
+gem "httparty", "~> 0.21.0"
